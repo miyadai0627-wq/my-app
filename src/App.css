@@ -13,3 +13,5 @@ input, button {
   border-radius: 8px;        /* 箱全体も角丸にする */
   gap: 12px;                 /* 入力欄やボタンの間に隙間を空ける */
 }
+
+.error-text { color: red; font-size: 12px; margin: 0; }
