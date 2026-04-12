@@ -31,20 +31,26 @@ function App() {
     <div className="todo-app">
       <h1>TODO一覧</h1>
       <div className="input-area">
+        <div className="input-group">
         <input
           type="text"
           placeholder="タイトル"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
+          className={titleError ? 'error-input' : ''}
         />
         {titleError && <p className="error-text">未入力です</p>}
+        </div>
+        <div className="input-group">
         <input
           type="date"
           value={date}
           onChange={(e) => setDate(e.target.value)}
+          className={dateError ? 'error-input' : ''}
         />
         {dateError && <p className="error-text">未入力です</p>}
-        <button onClick={onClickAdd}>追加</button>
+        </div>
+        <button className="add-button" onClick={onClickAdd}>追加</button>
       </div>
     </div>
   )
