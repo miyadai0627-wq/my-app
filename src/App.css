@@ -51,3 +51,52 @@ input, button {
   font-weight: bold;         
   cursor: pointer;           
 }
+
+/* --- App.css に追記 --- */
+
+/* TODOがない時のメッセージ */
+.empty-message {
+  color: #666;
+  text-align: center;
+  margin-top: 40px;
+}
+
+/* TODOリスト全体と、1つ1つのアイテムの箱 */
+.todo-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 32px; /* 入力エリアとの間に余白をあける */
+}
+
+.todo-item {
+  background-color: #f9f9f9; /* とても薄いグレー */
+  padding: 16px 20px;
+  border-radius: 8px;
+  display: flex;             /* タイトルと削除ボタンを横並びにする */
+  justify-content: space-between; /* 左右に離す */
+  align-items: center;       /* 高さを中央で揃える */
+}
+
+/* タイトルと日付の文字設定 */
+.todo-title {
+  margin: 0 0 8px 0; /* 日付との間に少し隙間をあける */
+  font-weight: bold;
+  color: #333;
+}
+
+.todo-date {
+  margin: 0;
+  font-size: 13px;
+  color: #666;
+}
+
+/* 削除ボタンを赤くする */
+.delete-button {
+  background-color: #e53e3e; /* 赤 */
+  color: white;
+  border: none;              /* 枠線を消す */
+  font-size: 12px;
+  padding: 8px 16px;
+  cursor: pointer;
+}
