@@ -40,6 +40,14 @@ function App() {
       setDate('');
     }
   }
+    // 削除ボタンが押された時の処理（どのTODOを消すか判断するために id を受け取る）
+  const onClickDelete = (id) => {
+    // filterを使って、「クリックされたidと【違う】idを持っているTODO」だけを残す
+  const newTodos = todos.filter((todo) => todo.id !== id);
+    
+    // その残ったTODOたちを、新しいリストとして保存し直す
+    setTodos(newTodos);
+  }
   return (
     <div className="todo-app">
       <h1>TODO一覧</h1>
@@ -78,7 +86,7 @@ function App() {
                 <p className="todo-title">{todo.title}</p>
                 <p className="todo-date">{todo.date}</p>
               </div>
-              <button className="delete-button">削除</button>
+              <button className="delete-button" onClick={() => onClickDelete(todo.id)}>削除</button>
             </div>
           ))}
         </div>
