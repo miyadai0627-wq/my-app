@@ -6,6 +6,8 @@ function App() {
   const [date, setDate] = useState('');
   const [titleError, setTitleError] = useState(false) // タイトルが未入力かどうかの記憶（最初はfalse=エラーなし）
   const [dateError, setDateError] = useState(false)   // 期限が未入力かどうかの記憶（最初はfalse=エラーなし）
+  const [todos, setTodos] = useState([]); // TODOリスト本体を保存する配列
+
   const onClickAdd = () => {
     // タイトルが空っぽ（''）ならエラーをtrue、入力されていればfalseにする
     if (title === '') {
@@ -21,10 +23,21 @@ function App() {
       setDateError(false)
     }
 
-    // もし両方とも入力されていたら、とりあえず入力欄を空っぽにリセットする
+    // もし両方とも入力されていたら...
     if (title !== '' && date !== '') {
-      setTitle('')
-      setDate('')
+      // ① 新しいTODOのデータを作る
+      const newTodo = {
+        id: Date.now(), // 削除する時などに必要になる「絶対にかぶらないID」（現在時刻の数字を利用）
+        title: title,
+        date: date
+      };
+
+      // ② 古いTODOリストの最後に、新しいTODOを合体させて保存し直す
+      setTodos([...todos, newTodo]);
+
+      // ③ 入力欄を空っぽにリセットする
+      setTitle('');
+      setDate('');
     }
   }
   return (
@@ -51,9 +64,26 @@ function App() {
         {dateError && <p className="error-text">未入力です</p>}
         </div>
         <button className="add-button" onClick={onClickAdd}>追加</button>
-      </div>
-    </div>
+        </div>
+      {/* --- ↓ ここから下がTODOリストの表示エリア ↓ --- */}
+      {todos.length === 0 ? (
+        // TODOが0件（配列が空っぽ）の時の表示
+        <p className="empty-message">TODOがありません</p>
+      ) : (
+        // TODOが1件以上ある時の表示
+        <div className="todo-list">
+          {todos.map((todo) => (
+            <div key={todo.id} className="todo-item">
+              <div className="todo-content">
+                <p className="todo-title">{todo.title}</p>
+                <p className="todo-date">{todo.date}</p>
+              </div>
+              <button className="delete-button">削除</button>
+            </div>
+          ))}
+        </div>
+      )}
+     </div>
   )
 }
-
 export default App
