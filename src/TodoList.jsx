@@ -8,7 +8,7 @@ function TodoList() {
   const [date, setDate] = useState('');
   const [titleError, setTitleError] = useState(false); // タイトルが未入力かどうかの記憶（最初はfalse=エラーなし）
   const [dateError, setDateError] = useState(false);   // 期限が未入力かどうかの記憶（最初はfalse=エラーなし）
-  const { todos, setTodos } = useContext(TodoContext);
+  const { todos, dispatch } = useContext(TodoContext);
 
   const onClickAdd = () => {
     // タイトルが空っぽ（''）ならエラーをtrue、入力されていればfalseにする
@@ -29,10 +29,12 @@ function TodoList() {
     if (title !== '' && date !== '') {
       // ① 新しいTODOのデータを作る
       const newTodo = {
-        id: Date.now(), // 削除する時などに必要になる「絶対にかぶらないID」（現在時刻の数字を利用）
+        id: Date.now(),
         title: title,
-        date: date
+        date: date,
+        description: '' // ← 【重要】レビュー指摘箇所：最初から空っぽのdescriptionを持たせておく！
       };
+      dispatch({ type: 'ADD_TODO', payload: newTodo }); // setTodosの代わりに注文(dispatch)を送る
 
       // ② 古いTODOリストの最後に、新しいTODOを合体させて保存し直す
       setTodos([...todos, newTodo]);
@@ -44,11 +46,7 @@ function TodoList() {
   }
     // 削除ボタンが押された時の処理（どのTODOを消すか判断するために id を受け取る）
   const onClickDelete = (id) => {
-    // filterを使って、「クリックされたidと【違う】idを持っているTODO」だけを残す
-  const newTodos = todos.filter((todo) => todo.id !== id);
-    
-    // その残ったTODOたちを、新しいリストとして保存し直す
-    setTodos(newTodos);
+    dispatch({ type: 'DELETE_TODO', payload: id });
   }
   return (
     <div className="todo-app">
