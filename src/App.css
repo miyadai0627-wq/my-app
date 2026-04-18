@@ -52,8 +52,6 @@ input, button {
   cursor: pointer;           
 }
 
-/* --- App.css に追記 --- */
-
 /* TODOがない時のメッセージ */
 .empty-message {
   color: #666;
@@ -99,4 +97,53 @@ input, button {
   font-size: 12px;
   padding: 8px 16px;
   cursor: pointer;
+}
+
+/* =========================================
+   詳細画面 (TodoDetail) 用の追加スタイル
+   ========================================= */
+
+/* ← 一覧に戻る リンクのスタイル */
+.back-link {
+  display: inline-block;
+  margin-bottom: 20px;
+  color: #111111;
+  text-decoration: none;
+  font-weight: bold;
+  transition: color 0.2s ease;
+}
+
+.back-link:hover {
+  color: #0056b3;
+  text-decoration: underline;
+}
+
+/* 入力欄の上の文字（タイトル・詳細メモ）のスタイル */
+.input-group label {
+  display: block;
+  margin: 10px 0px 10px 0;
+  font-weight: bold;
+  color: #555;
+  text-align: left;
+}
+
+/* 複数行の入力欄（テキストエリア）のスタイル */
+textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 16px;
+  box-sizing: border-box;
+  min-height: 150px; /* 最初から高さを確保して書きやすくする */
+  resize: vertical; /* 右下のツマミで縦方向にだけ広げられるようにする */
+  font-family: inherit; /* フォントを他の入力欄と揃える */
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+/* テキストエリアを選択（入力）している時の枠線の色 */
+textarea:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.2);
 }
