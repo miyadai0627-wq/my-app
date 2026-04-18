@@ -3,35 +3,58 @@ import { useParams, Link } from 'react-router-dom';
 import { TodoContext } from './TodoContext';
 
 export default function TodoDetail() {
-  // 1. URLの末尾にある「:id」の部分を取り出す魔法のフック
   const { id } = useParams();
+  // ★金庫から dispatch を取り出す
+  const { todos, dispatch } = useContext(TodoContext);
 
-  // 2. 共通の金庫から、すべてのTODOデータを引き出す
-  const { todos } = useContext(TodoContext);
-
-  // 3. 引き出したTODOリストの中から、URLのIDと一致する「1つ」を特定する
-  // ※ useParamsで取れる値は「文字列」なので、Number() で数字に変換して比較します
   const todo = todos.find((t) => t.id === Number(id));
 
-  // もしTODOが見つからなかった時のための安全策
-  if (!todo) {
-    return (
-      <div>
-        <p>TODOが見つかりませんでした。</p>
-        <Link to="/">一覧に戻る</Link>
-      </div>
-    );
-  }
+  // ...!todo の処理はそのまま...
 
+  // タイトル更新の関数
+  const onChangeTitle = (e) => {
+    dispatch({
+      type: 'UPDATE_TODO',
+      payload: {
+        id: todo.id,
+        updates: { title: e.target.value }
+      }
+    });
+  };
+
+  // 詳細メモ更新の関数
+  const onChangeDescription = (e) => {
+    dispatch({
+      type: 'UPDATE_TODO',
+      payload: {
+        id: todo.id,
+        updates: { description: e.target.value }
+      }
+    });
+  };
   return (
     <div className="todo-app">
       <Link to="/" className="back-link">← 一覧に戻る</Link>
       
       <h1>詳細画面</h1>
       <p>ID: {id} の内容を表示しています</p>
-      
-      {/* 次のチケットでここに入力欄を作ります */}
-      <h2>タイトル: {todo.title}</h2>
+      <div className="input-group">
+        <label>タイトル</label>
+        <input 
+        type="text" 
+        value={todo.title} 
+        onChange={onChangeTitle} />
+      </div>
+
+      <div className="input-group">
+        <label>詳細</label>
+        <textarea 
+        name="description" 
+        id="" placeholder="詳細を記入してください" 
+        value={todo.description || ''} 
+        onChange={onChangeDescription}
+        ></textarea>
+      </div>
       <p>期限: {todo.date}</p>
     </div>
   );
