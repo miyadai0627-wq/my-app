@@ -27,19 +27,17 @@ function TodoList() {
 
     // もし両方とも入力されていたら...
     if (title !== '' && date !== '') {
-      // ① 新しいTODOのデータを作る
+     // ① 新しいTODOのデータを作る
       const newTodo = {
         id: Date.now(),
         title: title,
         date: date,
-        description: '' // ← 【重要】レビュー指摘箇所：最初から空っぽのdescriptionを持たせておく！
+        description: '' 
       };
-      dispatch({ type: 'ADD_TODO', payload: newTodo }); // setTodosの代わりに注文(dispatch)を送る
+      // 注文を送るだけでOK！
+      dispatch({ type: 'ADD_TODO', payload: newTodo }); 
 
-      // ② 古いTODOリストの最後に、新しいTODOを合体させて保存し直す
-      setTodos([...todos, newTodo]);
-
-      // ③ 入力欄を空っぽにリセットする
+      // ② 入力欄を空っぽにリセットする
       setTitle('');
       setDate('');
     }
