@@ -9,7 +9,15 @@ export default function TodoDetail() {
 
   const todo = todos.find((t) => t.id === Number(id));
 
-  // ...!todo の処理はそのまま...
+  // もしTODOが見つからなかった時のための安全策
+  if (!todo) {
+    return (
+      <div className="todo-app">
+        <p>TODOが見つかりませんでした。</p>
+        <Link to="/">一覧に戻る</Link>
+      </div>
+    );
+  }
 
   // タイトル更新の関数
   const onChangeTitle = (e) => {
