@@ -1,4 +1,4 @@
-import { createContext, useReducer } from 'react';
+import { createContext, useReducer, useEffect } from 'react';
 
 // ① 金庫（Context）の作成
 export const TodoContext = createContext();
@@ -20,14 +20,31 @@ function todoReducer(state, action) {
       return state;
   }
 }
-
+// LocalStorageからデータを読み込む関数
+const getInitialTodos = () => {
+  try {
+    const savedTodos = localStorage.getItem('todos');
+    // データがあればJSONとして解析して返す。なければ空の配列 [] を返す。
+    return savedTodos ? JSON.parse(savedTodos) : [];
+  } catch (error) {
+    // 予期せぬエラー（データが壊れている等）が起きたら空の配列を返す
+    console.error("データの読み込みに失敗しました", error);
+    return [];
+  }
+};
 // ③ 管理人（Provider）の設定
 export function TodoProvider({ children }) {
-  // useReducer(料理人, 初期値) を使います
-  const [todos, dispatch] = useReducer(todoReducer, []);
+  // --- ここから下がコンポーネントの中身（フックが使える場所） ---
+  
+  // useReducerの初期値に getInitialTodos() を指定
+  const [todos, dispatch] = useReducer(todoReducer, getInitialTodos());
+
+  // 自動保存：todosが更新されるたびにLocalStorageに書き込む
+  useEffect(() => {
+    localStorage.setItem('todos', JSON.stringify(todos));
+  }, [todos]);
 
   return (
-    // 金庫の中には「データ(todos)」と「注文窓口(dispatch)」を入れます
     <TodoContext.Provider value={{ todos, dispatch }}>
       {children}
     </TodoContext.Provider>
