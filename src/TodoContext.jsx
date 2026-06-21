@@ -1,4 +1,4 @@
-import { createContext, useReducer, useEffect } from 'react';
+import { createContext, useReducer, useEffect, useRef } from 'react';
 
 // ① 金庫（Context）の作成
 export const TodoContext = createContext();
@@ -42,6 +42,44 @@ export function TodoProvider({ children }) {
   // 自動保存：todosが更新されるたびにLocalStorageに書き込む
   useEffect(() => {
     localStorage.setItem('todos', JSON.stringify(todos));
+  }, [todos]);
+
+  // リマインダー通知
+  const shownRef = useRef(
+    new Set(JSON.parse(localStorage.getItem('shownReminders') || '[]'))
+  );
+
+  useEffect(() => {
+    if (Notification.permission === 'default') {
+      Notification.requestPermission();
+    }
+
+    const check = () => {
+      if (Notification.permission !== 'granted') return;
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+
+      todos.forEach(todo => {
+        if (!todo.date || todo.reminder === 'none' || todo.reminder == null) return;
+        const dueDate = new Date(todo.date);
+        dueDate.setHours(0, 0, 0, 0);
+        const diffDays = Math.round((dueDate - today) / (1000 * 60 * 60 * 24));
+        const threshold = Number(todo.reminder);
+        if (diffDays === threshold) {
+          const key = `${todo.id}-${todo.reminder}`;
+          if (!shownRef.current.has(key)) {
+            shownRef.current.add(key);
+            localStorage.setItem('shownReminders', JSON.stringify([...shownRef.current]));
+            const label = threshold === 0 ? '本日期限' : `${threshold}日後が期限`;
+            new Notification(`📌 ${todo.title}`, { body: `${label}のTODOがあります (${todo.date})` });
+          }
+        }
+      });
+    };
+
+    check();
+    const timer = setInterval(check, 60 * 1000);
+    return () => clearInterval(timer);
   }, [todos]);
 
   return (

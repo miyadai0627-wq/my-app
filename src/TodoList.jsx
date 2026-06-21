@@ -6,8 +6,9 @@ import './App.css'
 function TodoList() {
   const [title, setTitle] = useState('');
   const [date, setDate] = useState('');
-  const [titleError, setTitleError] = useState(false); // タイトルが未入力かどうかの記憶（最初はfalse=エラーなし）
-  const [dateError, setDateError] = useState(false);   // 期限が未入力かどうかの記憶（最初はfalse=エラーなし）
+  const [reminder, setReminder] = useState('none');
+  const [titleError, setTitleError] = useState(false);
+  const [dateError, setDateError] = useState(false);
   const { todos, dispatch } = useContext(TodoContext);
 
   const onClickAdd = () => {
@@ -32,7 +33,8 @@ function TodoList() {
         id: Date.now(),
         title: title,
         date: date,
-        description: '' 
+        description: '',
+        reminder: reminder,
       };
       // 注文を送るだけでOK！
       dispatch({ type: 'ADD_TODO', payload: newTodo }); 
@@ -40,6 +42,7 @@ function TodoList() {
       // ② 入力欄を空っぽにリセットする
       setTitle('');
       setDate('');
+      setReminder('none');
     }
   }
     // 削除ボタンが押された時の処理（どのTODOを消すか判断するために id を受け取る）
@@ -48,6 +51,10 @@ function TodoList() {
   }
   return (
     <div className="todo-app">
+      <div className="tab-nav">
+        <span className="tab active">TODO一覧</span>
+        <Link to="/calendar" className="tab">カレンダー</Link>
+      </div>
       <h1>TODO一覧</h1>
       <div className="input-area">
         <div className="input-group">
@@ -68,6 +75,19 @@ function TodoList() {
           className={dateError ? 'error-input' : ''}
         />
         {dateError && <p className="error-text">未入力です</p>}
+        </div>
+        <div className="input-group">
+          <select
+            value={reminder}
+            onChange={(e) => setReminder(e.target.value)}
+            className="reminder-select"
+          >
+            <option value="none">リマインダーなし</option>
+            <option value="0">当日</option>
+            <option value="1">1日前</option>
+            <option value="3">3日前</option>
+            <option value="7">1週間前</option>
+          </select>
         </div>
         <button className="add-button" onClick={onClickAdd}>追加</button>
         </div>

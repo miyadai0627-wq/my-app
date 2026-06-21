@@ -30,6 +30,13 @@ export default function TodoDetail() {
     });
   };
 
+  const onChangeReminder = (e) => {
+    dispatch({
+      type: 'UPDATE_TODO',
+      payload: { id: todo.id, updates: { reminder: e.target.value } }
+    });
+  };
+
   // 詳細メモ更新の関数
   const onChangeDescription = (e) => {
     dispatch({
@@ -64,6 +71,21 @@ export default function TodoDetail() {
         ></textarea>
       </div>
       <p>期限: {todo.date}</p>
+
+      <div className="input-group">
+        <label>リマインダー</label>
+        <select
+          value={todo.reminder ?? 'none'}
+          onChange={onChangeReminder}
+          className="reminder-select"
+        >
+          <option value="none">リマインダーなし</option>
+          <option value="0">当日</option>
+          <option value="1">1日前</option>
+          <option value="3">3日前</option>
+          <option value="7">1週間前</option>
+        </select>
+      </div>
     </div>
   );
 }
